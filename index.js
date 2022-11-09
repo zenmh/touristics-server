@@ -22,6 +22,7 @@ const client = new MongoClient(uri, {
 const run = async () => {
   try {
     const serviceCollection = client.db("touristics").collection("services");
+    const reviewCollection = client.db("touristics").collection("reviews");
 
     app.get("/services", async (req, res) => {
       const query = {};
@@ -42,6 +43,37 @@ const run = async () => {
       const query = { _id: ObjectId(id) };
       const service = await serviceCollection.findOne(query);
       res.send(service);
+    });
+
+    app.get("/myreviews", async (req, res) => {
+      let query = {};
+      if (req.query.email) {
+        query = { email: req.query.email };
+      }
+      const cursor = reviewCollection.find(query);
+      const reviews = await cursor.toArray();
+      res.send(reviews);
+    });
+
+    app.get("/itemReviews", async (req, res) => {
+      const title = req.query.title;
+      const query = { title: title };
+      const cursor = reviewCollection.find(query);
+      const reviews = await cursor.toArray();
+      res.send(reviews);
+    });
+
+    app.post("/reviews", async (req, res) => {
+      const review = req.body;
+      const reviews = await reviewCollection.insertOne(review);
+      res.send(reviews);
+    });
+
+    app.delete("/reviews/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const result = await reviewCollection.deleteOne(query);
+      res.send(result);
     });
   } finally {
   }
