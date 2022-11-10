@@ -115,12 +115,11 @@ const run = async () => {
       const id = req.params.id;
       const query = { _id: ObjectId(id) };
       const review = req.body;
-      // console.log(review);
       const option = { upsert: true };
       const updateReview = {
         $set: {
           service_id: review.service_id,
-          email: review.email,
+
           userImg: review.userImg,
           Img: review.Img,
           price: review.price,
