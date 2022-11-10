@@ -119,7 +119,7 @@ const run = async () => {
       const updateReview = {
         $set: {
           service_id: review.service_id,
-
+          email: review.email,
           userImg: review.userImg,
           Img: review.Img,
           price: review.price,
